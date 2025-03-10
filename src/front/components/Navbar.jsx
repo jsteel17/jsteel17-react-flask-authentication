@@ -1,19 +1,35 @@
-import { Link } from "react-router-dom";
+import { useActionState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import Context from "../hooks/useGlobalReducer"
+import { useContext } from "react";
 
-export const Navbar = () => {
+const Navbar = () => {
+    // const navigate = useNavigate();
 
-	return (
-		<nav className="navbar navbar-light bg-light">
-			<div className="container">
-				<Link to="/">
-					<span className="navbar-brand mb-0 h1">React Boilerplate</span>
-				</Link>
-				<div className="ml-auto">
-					<Link to="/demo">
-						<button className="btn btn-primary">Check the Context in action</button>
-					</Link>
-				</div>
-			</div>
-		</nav>
-	);
+    // const handleLogout = () => {
+    //     sessionStorage.removeItem("token");
+    //     navigate("/login");
+    // };
+    const {store, actions} = useContext(Context);
+
+    const handleLogout = () => {
+        actions.logout();
+        window.location.href = "/";
+    }
+
+    return (
+        <nav>
+            <ul>
+                <li><Link to="/">Home</Link></li>
+                <li><Link to="/signup">Signup</Link></li>
+                <li><Link to="/login">Login</Link></li>
+                <li><Link to="/private">Private</Link></li>
+                <li>
+                    <button onClick={handleLogout}>Logout</button>
+                </li>
+            </ul>
+        </nav>
+    );
 };
+
+export default Navbar;
