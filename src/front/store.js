@@ -12,7 +12,12 @@ export const initialStore=()=>{
         title: "Do my homework",
         background: null,
       }
-    ]
+    ],
+    store: {
+      token: null,
+      isSignupSuccessful : false,
+      login : false
+    }
   }
 }
 

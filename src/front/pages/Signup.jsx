@@ -1,25 +1,21 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import useGlobalReducer from "../hooks/useGlobalReducer";
 
 const Signup = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+  const {store, dispatch} = useGlobalReducer();
 
-  const handleSignup = async (e) => {
-    e.preventDefault();
-    const response = await fetch("http://localhost:5000/signup", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password }),
-    });
-
-    if (response.ok) {
-      navigate("/login");
-    } else {
-      alert("Signup failed");
+const handleSignup = () => {
+  actions.signup(email, password)
+}
+  useEffect(() => {
+    if (store.isSignupSuccessful) {
+      navigate("/login")
     }
-  };
+  }, [store.isSignupSuccessful])
 
   return (
     <form onSubmit={handleSignup}>

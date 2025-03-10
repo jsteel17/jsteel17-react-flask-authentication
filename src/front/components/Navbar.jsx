@@ -1,7 +1,5 @@
-import { useActionState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import Context from "../hooks/useGlobalReducer"
-import { useContext } from "react";
+import useGlobalReducer from "../hooks/useGlobalReducer";
 
 const Navbar = () => {
     // const navigate = useNavigate();
@@ -10,10 +8,10 @@ const Navbar = () => {
     //     sessionStorage.removeItem("token");
     //     navigate("/login");
     // };
-    const {store, actions} = useContext(Context);
+    const {store, dispatch} = useGlobalReducer();
 
     const handleLogout = () => {
-        actions.logout();
+        dispatch({type: "LOGOUT"});
         window.location.href = "/";
     }
 
