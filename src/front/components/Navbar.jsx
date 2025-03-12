@@ -2,12 +2,6 @@ import { Link, useNavigate } from "react-router-dom";
 import useGlobalReducer from "../hooks/useGlobalReducer";
 
 const Navbar = () => {
-    // const navigate = useNavigate();
-
-    // const handleLogout = () => {
-    //     sessionStorage.removeItem("token");
-    //     navigate("/login");
-    // };
     const {store, dispatch} = useGlobalReducer();
 
     const handleLogout = () => {

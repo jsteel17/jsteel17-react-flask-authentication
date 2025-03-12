@@ -5,14 +5,12 @@ from api.models import db, User
 
 api = Blueprint('api', __name__)
 
-# Configure JWT
 jwt = JWTManager()
 
 def init_jwt(app):
     app.config['JWT_SECRET_KEY'] = "supersecretkey"
     jwt.init_app(app)
 
-# Signup Route
 @api.route('/signup', methods=['POST'])
 def signup():
     data = request.get_json()
@@ -29,7 +27,6 @@ def signup():
 
     return jsonify({"message": "User created successfully"}), 201
 
-# Login Route
 @api.route('/login', methods=['POST'])
 def login():
     data = request.get_json()
@@ -43,7 +40,6 @@ def login():
     access_token = create_access_token(identity=user.id)
     return jsonify({"token": access_token}), 200
 
-# Protected Route
 @api.route('/private', methods=['GET'])
 @jwt_required()
 def private():
