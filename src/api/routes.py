@@ -43,6 +43,6 @@ def login():
 @api.route('/private', methods=['GET'])
 @jwt_required()
 def private():
-    user_id = get_jwt_identity()
-    user = User.query.get(user_id)
+    user_id = int(get_jwt_identity())
+    user = db.session.get(User, user_id)
     return jsonify({"message": "Access granted", "user": user.serialize()}), 200

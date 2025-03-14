@@ -11,7 +11,10 @@ const Login = () => {
   const { store, dispatch } = useGlobalReducer();
 
   const handleSubmit = async () => {
-    handleLogin(email, password, dispatch)
+    const success = await handleLogin(email, password, dispatch)
+    if (success) {
+      navigate("/private")
+    }
     console.log(sessionStorage.getItem("token"))
   };
   useEffect(() => {

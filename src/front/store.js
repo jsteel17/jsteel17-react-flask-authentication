@@ -131,35 +131,32 @@ export const handleSignup = (email, password, dispatch) => {
 };
 
 // log in handler
-export const handleLogin = (email, password, dispatch) => {
+export const handleLogin = async (email, password, dispatch) => {
   const backendURL = import.meta.env.VITE_BACKEND_URL;
-
-  fetch(`${backendURL}/login`, {
+try {
+  const res = await fetch(`${backendURL}/login`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
+    
     body: JSON.stringify({ email, password }),
-  })
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error("Failed to log in");
-      }
-      return response.json();
-    })
-    .then((data) => {
-      if (data.access_token) {
-        sessionStorage.setItem("token", data.access_token);
+  });
+  const data = await res.json()
+      if (data.token) {
+        sessionStorage.setItem("token", data.token);
         dispatch({
           type: actionTypes.HANDLE_LOGIN_SUCCESS,
-          payload: { token: data.access_token },
+          payload: { token: data.token },
         });
+        return true
       } else {
         dispatch({ type: actionTypes.HANDLE_LOGIN_FAILURE });
-      }
-    })
-    .catch((error) => {
+        return false
+         }
+        }
+    catch(error) {
       console.error("Error logging in:", error);
       dispatch({ type: actionTypes.HANDLE_LOGIN_FAILURE });
-    });
+    };
 };
