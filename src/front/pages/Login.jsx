@@ -1,34 +1,37 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { handleLogin } from "../store";
+import useGlobalReducer from "../hooks/useGlobalReducer";
+import { Link } from "react-router-dom";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+  const { store, dispatch } = useGlobalReducer();
 
-  const handleLogin = async (e) => {
-    e.preventDefault();
-    const response = await fetch("https://crispy-orbit-9766wqjpr45p3xgrj-3001.app.github.dev/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password }),
-    });
-    console.log()
-
-    const data = await response.json();
-    if (response.ok) {
-      sessionStorage.setItem("token", data.token);
-      navigate("/private");
-    } else {
-      alert("Login failed");
-    }
+  const handleSubmit = async () => {
+    handleLogin(email, password, dispatch)
+    console.log(sessionStorage.getItem("token"))
   };
+  useEffect(() => {
+    console.log("here's the store: ", store)
+    if (store.store.token) {
+      console.log("Token exists in state:", store.store.token);
+    }
+  }, [])
 
   return (
-    <form onSubmit={handleLogin}>
+    <form onSubmit={(e) => { e.preventDefault(); handleSubmit(email, password, dispatch) }}>
       <input type="email" placeholder="Email" onChange={(e) => setEmail(e.target.value)} required />
       <input type="password" placeholder="Password" onChange={(e) => setPassword(e.target.value)} required />
-      <button type="submit">Login</button>
+      {store.store.token ? (
+        <Link to="/private">
+          <button type="submit">Login</button>
+        </Link>
+      ) : (
+        <button type="submit">Login</button>
+      )}
     </form>
   );
 };
